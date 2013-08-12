@@ -1,0 +1,54 @@
+[user]
+	name       = Ali Polatel
+	email      = alip@exherbo.org
+	signingkey = 0x1845F220
+[color]
+	branch = auto
+	diff = auto
+	status = auto
+	ui = auto
+[core]
+	excludesfile = ~/.gitignore
+[gc]
+	auto = 0
+[diff]
+	renames = copy
+[log]
+	date = iso8601
+[push]
+	default = tracking
+[alias]
+	alias = config --get-regexp ^alias\\.
+	br    = branch --v
+	d     = diff --full-index --patch-with-stat
+	dc    = diff --full-index --patch-with-stat --cached
+	dr    = diff --full-index --patch-with-stat --find-copies-harder --find-renames
+	dw    = diff --word-diff
+	fp    = format-patch -M -C --find-copies-harder --stdout
+	l     = log --graph \
+		--pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' \
+		--abbrev-commit --date=relative
+	ll    = log --decorate --graph
+	mine  = log --author=alip --author=polatel
+[format]
+	check    = true
+	headers  = "Organization: Pink Floyd\n"
+	numbered = auto
+	signoff  = false
+	thread   = true
+[sendemail]
+	confirm = auto
+	smtpencryption = tls
+	smtpserver = smtp.gmail.com
+	smtpuser = polatel@gmail.com
+	smtpserverport = 587
+[mailinfo]
+	scissors = true
+[gui]
+	fontdiff = -family Monospace -size 14 -weight normal -underline 0 -overstrike 0
+[merge]
+	conflictstyle = diff3
+	tool = vimdiff
+[github]
+	user  = alip
+	token = !~/bin/netrc-parse github.com

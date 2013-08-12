@@ -2,6 +2,9 @@ INSTALL = install -p -m 600 -D
 
 CONFIGS = \
 	Makefile \
+	gitconfig \
+	gitignore \
+	gitk \
 	vimrc \
 	zprofile \
 	zshenv \
