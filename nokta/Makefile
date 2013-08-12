@@ -6,6 +6,7 @@ CONFIGS = \
 	conkyrc-hayalet
 	Xresources-hayalet \
 	ackrc \
+	dir_colors \
 	gdbinit \
 	gitconfig \
 	gitignore \

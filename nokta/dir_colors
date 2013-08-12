@@ -1,0 +1,500 @@
+# Configuration file for dircolors, a utility to help you set the
+# LS_COLORS environment variable used by GNU ls with the --color option.
+
+# Copyright (C) 1996, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006
+# Free Software Foundation, Inc.
+# Copying and distribution of this file, with or without modification,
+# are permitted provided the copyright notice and this notice are preserved.
+#
+# You can copy this file to .dir_colors in your $HOME directory to override
+# the system defaults.
+
+# Below, there should be one TERM entry for each termtype that is colorizable
+TERM Eterm
+TERM ansi
+TERM color-xterm
+TERM con132x25
+TERM con132x30
+TERM con132x43
+TERM con132x60
+TERM con80x25
+TERM con80x28
+TERM con80x30
+TERM con80x43
+TERM con80x50
+TERM con80x60
+TERM cons25
+TERM console
+TERM cygwin
+TERM dtterm
+TERM gnome
+TERM konsole
+TERM kterm
+TERM linux
+TERM linux-c
+TERM mach-color
+TERM mlterm
+TERM putty
+TERM screen
+TERM screen-bce
+TERM screen-w
+TERM screen.linux
+TERM vt100
+TERM xterm
+TERM xterm-color
+TERM xterm-debian
+
+# Below are the color init strings for the basic file types. A color init
+# string consists of one or more of the following numeric codes:
+# Attribute codes:
+# 00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
+# Text color codes:
+# 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
+# Background color codes:
+# 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+NORMAL 00	# global default, although everything should be something.
+FILE 00		# normal file
+DIR 01;34	# directory
+LINK 01;36	# symbolic link.  (If you set this to 'target' instead of a
+		# numerical value, the color is as for the file pointed to.)
+FIFO 40;33	# pipe
+SOCK 01;35	# socket
+DOOR 01;35	# door
+BLK 40;33;01	# block device driver
+CHR 40;33;01	# character device driver
+ORPHAN 01;05;37;41  # orphaned syminks
+MISSING 01;05;37;41 # ... and the files they point to
+SETUID 37;41	# file that is setuid (u+s)
+SETGID 30;43	# file that is setgid (g+s)
+STICKY_OTHER_WRITABLE 30;42 # dir that is sticky and other-writable (+t,o+w)
+OTHER_WRITABLE 34;42 # dir that is other-writable (o+w) and not sticky
+STICKY 37;44	# dir with the sticky bit set (+t) and not other-writable
+
+EXEC 01;32
+
+# List any file extensions like '.gz' or '.tar' that you would like ls
+# to colorize below. Put the extension, a space, and the color init string.
+# (and any comments you want to add after a '#')
+
+# If you use DOS-style suffixes, you may want to uncomment the following:
+#.cmd 01;32 # executables (bright green)
+#.exe 01;32
+#.com 01;32
+#.btm 01;32
+#.bat 01;32
+# Or if you want to colorize scripts even if they do not have the
+# executable bit actually set.
+#.sh  01;32
+#.csh 01;32
+
+ # archives or compressed (bright red)
+.tar 01;31
+.tgz 01;31
+.arj 01;31
+.taz 01;31
+.lzh 01;31
+.zip 01;31
+.z   01;31
+.Z   01;31
+.gz  01;31
+.bz2 01;31
+.bz  01;31
+.tbz2 01;31
+.tz  01;31
+.deb 01;31
+.rpm 01;31
+.jar 01;31
+.rar 01;31
+.ace 01;31
+.zoo 01;31
+.cpio 01;31
+.7z  01;31
+.rz  01;31
+.lzma 01;31
+.xz 01;31
+
+# image formats
+.jpg 01;35
+.jpeg 01;35
+.gif 01;35
+.bmp 01;35
+.pbm 01;35
+.pgm 01;35
+.ppm 01;35
+.tga 01;35
+.xbm 01;35
+.xpm 01;35
+.tif 01;35
+.tiff 01;35
+.png 01;35
+.mng 01;35
+.pcx 01;35
+.mov 01;35
+.mpg 01;35
+.mpeg 01;35
+.m2v 01;35
+.mkv 01;35
+.ogm 01;35
+.mp4 01;35
+.m4v 01;35
+.mp4v 01;35
+.vob 01;35
+.qt  01;35
+.nuv 01;35
+.wmv 01;35
+.asf 01;35
+.rm  01;35
+.rmvb 01;35
+.flc 01;35
+.avi 01;35
+.fli 01;35
+.gl 01;35
+.dl 01;35
+.xcf 01;35
+.xwd 01;35
+.yuv 01;35
+
+
+# audio formats
+.aac 00;36
+.au 00;36
+.flac 00;36
+.mid 00;36
+.midi 00;36
+.mka 00;36
+.mp3 00;36
+.mpc 00;36
+.ogg 00;36
+.ra 00;36
+.wav 00;36
+
+# video formats
+.flv ;36
+
+# Extended color codes for terminals that support more than 16 colors:
+# (the above color codes still work for these terminals)
+# Text color coding:
+# 38;5;COLOR_NUMBER
+# Background color coding:
+# 48;5;COLOR_NUMBER
+# COLOR_NUMBER is from 0 to 255.
+
+# # 88 colors
+# TERM rxvt-unicode
+#
+# NORMAL 00	# global default, although everything should be something.
+# FILE 00		# normal file
+# DIR 00;38;5;24	# directory
+# LINK 00;38;5;27	# symbolic link.  (If you set this to 'target' instead of a
+# 		# numerical value, the color is as for the file pointed to.)
+# FIFO 40;33	# pipe
+# SOCK 01;35	# socket
+# DOOR 01;35	# door
+# BLK 40;33;01	# block device driver
+# CHR 40;33;01	# character device driver
+# ORPHAN 01;05;37;41  # orphaned syminks
+# MISSING 01;05;37;41 # ... and the files they point to
+# SETUID 37;41	# file that is setuid (u+s)
+# SETGID 30;43	# file that is setgid (g+s)
+# STICKY_OTHER_WRITABLE 30;42 # dir that is sticky and other-writable (+t,o+w)
+# OTHER_WRITABLE 34;42 # dir that is other-writable (o+w) and not sticky
+# STICKY 37;44	# dir with the sticky bit set (+t) and not other-writable
+#
+# # This is for files with execute permission:
+# EXEC 01;38;05;41
+#
+# # ebuilds and exheres
+# .ebuild 00;38;05;67
+# .eclass 00;38;05;67
+# .exlib 00;38;05;57
+# .exheres-0 00;38;05;57
+#
+# # archives or compressed (bright red)
+# .tar 00;38;5;53
+# .tgz 00;38;5;53
+# .arj 00;38;5;53
+# .taz 00;38;5;53
+# .lzh 00;38;5;53
+# .zip 00;38;5;53
+# .z   00;38;5;53
+# .Z   00;38;5;53
+# .gz  00;38;5;53
+# .bz2 00;38;5;53
+# .bz  00;38;5;53
+# .tbz2 00;38;5;53
+# .tz  00;38;5;53
+# .deb 00;38;5;53
+# .rpm 00;38;5;53
+# .jar 00;38;5;53
+# .rar 00;38;5;53
+# .ace 00;38;5;53
+# .zoo 00;38;5;53
+# .cpio 00;38;5;53
+# .7z  00;38;5;53
+# .rz  00;38;5;53
+# .lzma 00;38;5;53
+# .lrz 00;38;5;53
+# .paq8l 00;38;5;53
+# .xz 00;38;5;53
+#
+# # Document files
+# .pdf 00;38;05;70
+# .ps 00;38;05;70
+# .txt 00;38;05;70
+# .patch 00;38;05;70
+# .diff 00;38;05;70
+# .log 00;38;05;70
+# .tex 00;38;05;70
+# .doc 00;38;05;70
+#
+# # Image formats
+# .art 00;38;05;68
+# .bmp 00;38;05;68
+# .cdr 00;38;05;68
+# .cdt 00;38;05;68
+# .cpt 00;38;05;68
+# .djv 00;38;05;68
+# .djvu 00;38;05;68
+# .gif 00;38;05;68
+# .ico 00;38;05;68
+# .ief 00;38;05;68
+# .jng 00;38;05;68
+# .jpe 00;38;05;68
+# .jpeg 00;38;05;68
+# .jpg 00;38;05;68
+# .pat 00;38;05;68
+# .pbm 00;38;05;68
+# .pcx 00;38;05;68
+# .pgm 00;38;05;68
+# .png 00;38;05;68
+# .pnm 00;38;05;68
+# .ppm 00;38;05;68
+# .psd 00;38;05;68
+# .ras 00;38;05;68
+# .rgb 00;38;05;68
+# .svg 00;38;05;68
+# .svgz 00;38;05;68
+# .tif 00;38;05;68
+# .tiff 00;38;05;68
+# .wbmp 00;38;05;68
+# .xbm 00;38;05;68
+# .xpm 00;38;05;68
+# .xwd 00;38;05;68
+#
+# # Audio formats
+# .aif 00;38;05;76
+# .aifc 00;38;05;76
+# .aiff 00;38;05;76
+# .flac 00;38;05;76
+# .gsm 00;38;05;76
+# .kar 00;38;05;76
+# .m3u 00;38;05;76
+# .m4a 00;38;05;76
+# .mid 00;38;05;76
+# .midi 00;38;05;76
+# .mp2 00;38;05;76
+# .mp3 00;38;05;76
+# .mpega 00;38;05;76
+# .mpga 00;38;05;76
+# .oga 00;38;05;76
+# .ogg 00;38;05;76
+# .pls 00;38;05;76
+# .ra 00;38;05;76
+# .ram 00;38;05;76
+# .rm 00;38;05;76
+# .sd2 00;38;05;76
+# .sid 00;38;05;76
+# .shn 00;38;05;76
+# .wav 00;38;05;76
+# .wax 00;38;05;76
+# .wma 00;38;05;76
+# .wv 00;38;05;76
+#
+# # Video formats
+# .asf 00;38;05;77
+# .asx 00;38;05;77
+# .avi 00;38;05;77
+# .dif 00;38;05;77
+# .dl 00;38;05;77
+# .dv 00;38;05;77
+# .fli 00;38;05;77
+# .flv 00;38;05;77
+# .gl 00;38;05;77
+# .lsf 00;38;05;77
+# .lsx 00;38;05;77
+# .mng 00;38;05;77
+# .mov 00;38;05;77
+# .movie 00;38;05;77
+# .mp4 00;38;05;77
+# .mpe 00;38;05;77
+# .mpeg 00;38;05;77
+# .mpg 00;38;05;77
+# .mxu 00;38;05;77
+# .qt 00;38;05;77
+# .wm 00;38;05;77
+# .wmv 00;38;05;77
+# .wmx 00;38;05;77
+# .wvx 00;38;05;77
+
+TERM gnome-256color
+TERM konsole-256color
+TERM rxvt-unicode-256color
+TERM screen-256color
+TERM screen-256color-bce
+TERM xterm-256color
+
+NORMAL 00	# global default, although everything should be something.
+FILE 00		# normal file
+DIR 00;38;5;34	# directory
+LINK 00;38;5;39	# symbolic link.  (If you set this to 'target' instead of a
+		# numerical value, the color is as for the file pointed to.)
+FIFO 40;33	# pipe
+SOCK 01;35	# socket
+DOOR 01;35	# door
+BLK 40;33;01	# block device driver
+CHR 40;33;01	# character device driver
+ORPHAN 01;05;37;41  # orphaned syminks
+MISSING 01;05;37;41 # ... and the files they point to
+SETUID 37;41	# file that is setuid (u+s)
+SETGID 30;43	# file that is setgid (g+s)
+STICKY_OTHER_WRITABLE 30;42 # dir that is sticky and other-writable (+t,o+w)
+OTHER_WRITABLE 34;42 # dir that is other-writable (o+w) and not sticky
+STICKY 37;44	# dir with the sticky bit set (+t) and not other-writable
+
+# This is for files with execute permission:
+EXEC 01;38;05;41
+
+# ebuilds and exheres
+.ebuild 00;38;05;201
+.eclass 00;38;05;201
+.exlib 00;38;05;143
+.exheres-0 00;38;05;143
+
+# archives or compressed (bright red)
+.tar 00;38;5;131
+.tgz 00;38;5;131
+.arj 00;38;5;131
+.taz 00;38;5;131
+.lzh 00;38;5;131
+.zip 00;38;5;131
+.z   00;38;5;131
+.Z   00;38;5;131
+.gz  00;38;5;131
+.bz2 00;38;5;131
+.bz  00;38;5;131
+.tbz2 00;38;5;131
+.tz  00;38;5;131
+.deb 00;38;5;131
+.rpm 00;38;5;131
+.jar 00;38;5;131
+.rar 00;38;5;131
+.ace 00;38;5;131
+.zoo 00;38;5;131
+.cpio 00;38;5;131
+.7z  00;38;5;131
+.rz  00;38;5;131
+.lzma 00;38;5;131
+.lrz 00;38;5;131
+.paq8l 00;38;5;131
+.xz 00;38;5;131
+
+# Document files
+.pdf 00;38;05;205
+.ps 00;38;05;205
+.txt 00;38;05;205
+.patch 00;38;05;205
+.diff 00;38;05;205
+.log 00;38;05;205
+.tex 00;38;05;205
+.doc 00;38;05;205
+.chm  ;38;05;205
+
+# Image formats
+.art 00;38;05;202
+.bmp 00;38;05;202
+.cdr 00;38;05;202
+.cdt 00;38;05;202
+.cpt 00;38;05;202
+.djv 00;38;05;202
+.djvu 00;38;05;202
+.gif 00;38;05;202
+.ico 00;38;05;202
+.ief 00;38;05;202
+.jng 00;38;05;202
+.jpe 00;38;05;202
+.jpeg 00;38;05;202
+.jpg 00;38;05;202
+.pat 00;38;05;202
+.pbm 00;38;05;202
+.pcx 00;38;05;202
+.pgm 00;38;05;202
+.png 00;38;05;202
+.pnm 00;38;05;202
+.ppm 00;38;05;202
+.psd 00;38;05;202
+.ras 00;38;05;202
+.rgb 00;38;05;202
+.svg 00;38;05;202
+.svgz 00;38;05;202
+.tif 00;38;05;202
+.tiff 00;38;05;202
+.wbmp 00;38;05;202
+.xbm 00;38;05;202
+.xpm 00;38;05;202
+.xwd 00;38;05;202
+
+# Audio formats
+.aif 00;38;05;226
+.aifc 00;38;05;226
+.aiff 00;38;05;226
+.flac 00;38;05;226
+.gsm 00;38;05;226
+.kar 00;38;05;226
+.m3u 00;38;05;226
+.m4a 00;38;05;226
+.mid 00;38;05;226
+.midi 00;38;05;226
+.mp2 00;38;05;226
+.mp3 00;38;05;226
+.mpega 00;38;05;226
+.mpga 00;38;05;226
+.oga 00;38;05;226
+.ogg 00;38;05;226
+.pls 00;38;05;226
+.ra 00;38;05;226
+.ram 00;38;05;226
+.rm 00;38;05;226
+.sd2 00;38;05;226
+.shn   ;38;05;226
+.sid 00;38;05;226
+.wav 00;38;05;226
+.wax 00;38;05;226
+.wma 00;38;05;226
+.wv 00;38;05;226
+
+# Video formats
+.asf 00;38;05;227
+.asx 00;38;05;227
+.avi 00;38;05;227
+.dif 00;38;05;227
+.dl 00;38;05;227
+.dv 00;38;05;227
+.fli 00;38;05;227
+.flv 00;38;05;227
+.gl 00;38;05;227
+.lsf 00;38;05;227
+.lsx 00;38;05;227
+.mng 00;38;05;227
+.mov 00;38;05;227
+.movie 00;38;05;227
+.mp4 00;38;05;227
+.mpe 00;38;05;227
+.mpeg 00;38;05;227
+.mpg 00;38;05;227
+.mxu 00;38;05;227
+.qt 00;38;05;227
+.webm ;38;05;227
+.wm 00;38;05;227
+.wmv 00;38;05;227
+.wmx 00;38;05;227
+.wvx 00;38;05;227
