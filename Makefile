@@ -10,6 +10,7 @@ clean:
 
 install:
 	$(MAKE) -C nokta install
+	bash -c ./vim-uzak.bash
 .PHONY: install
 
 update-modules:

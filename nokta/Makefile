@@ -2,6 +2,7 @@ INSTALL = install -p -m 600 -D
 
 CONFIGS = \
 	Makefile \
+	vimrc \
 	zprofile \
 	zshenv \
 	zshrc \

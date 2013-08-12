@@ -1,0 +1,741 @@
+scriptencoding-utf-8
+" alip's vim configuration
+" mostly based on ciaranm's
+
+" General Settings
+set nocompatible                   " Use Vim defaults (much better!)
+set fileencoding=utf-8             " Set file encoding to UTF-8
+set backspace=indent,eol,start     " Make backspace delete lots of things
+set ruler                          " Show the cursor position all the time
+set showcmd                        " Show (partial) command in status line.
+set ttyfast                        " Indicate a fast terminal connection
+set lazyredraw                     " Speed up macros
+set hidden                         " Allow edit buffers to be hidden
+set autochdir                      " Change the current working directory to open file's
+set number                         " Put line numbers
+set showmatch                      " Highlight matching parens
+set smartcase                      " Override ignorecase if search pattern has upper case
+set showfulltag                    " Show full tags when doing search completion
+set popt+=syntax:y                 " Syntax when printing
+set viminfo='1000,f1,:1000,/1000   " Keep a .viminfo file.
+set history=500                    " Keep 500 lines of command history
+set tabpagemax=17                  " Maximum number of tab pages
+
+" Make backups
+set backup
+set backupdir=~/.vim/backup,~/.local/tmp,.,~/
+set directory=~/.vim/tmp,~/.local/tmp,.
+
+" Session options
+set sessionoptions=blank,buffers,curdir,folds,help,resize,tabpages,winsize
+
+" Ready, set, go!
+let mapleader = ","
+
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+if isdirectory(expand("$VIMRUNTIME/ftplugin"))
+  filetype on         " Enable file type detection
+  filetype plugin on  " Enable loading the plugins file for specific file types
+  filetype indent on  " Enable loading the indent file for specific file types
+endif
+
+" If possible, try to use a narrow number column
+if v:version >= 700
+  try
+    setlocal numberwidth=3
+  catch
+  endtry
+endif
+
+" Do clever indent things. Don't make a # force column zero.
+set autoindent
+set smartindent
+inoremap # X<BS>#
+
+" Wrap on these
+set whichwrap+=<,>,[,]
+
+" 1 height windows
+set winminheight=1
+
+" Enable virtual edit in vblock mode, and one past the end
+set virtualedit=block,onemore
+
+" No annoying error noises
+set noerrorbells
+set visualbell t_vb=
+if has("autocmd")
+    autocmd GUIEnter * set visualbell t_vb=
+endif
+
+" Enable folds
+if has("folding")
+    set foldenable
+    set foldmethod=manual
+    set foldlevelstart=99
+endif
+
+" Include $HOME in cdpath
+if has("file_in_path")
+    let &cdpath=','.expand("$HOME").','.expand("$HOME").'/Kaynaklar'
+endif
+
+" Better include path handling
+set path+=src/
+let &inc.=' ["<]'
+
+" Set up some more useful digraphs
+if has("digraphs")
+    digraph ., 8230    " ellipsis (…)
+endif
+
+set incsearch
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch " Turn on hilighting of search results
+endif
+
+" Selective case insensitivity
+if has("autocmd")
+  autocmd BufEnter *
+    \ if &filetype == "cpp" || &filetype == "python" |
+    \   set noignorecase noinfercase |
+    \ else |
+    \   set ignorecase infercase |
+    \ endif
+else
+  set ignorecase
+  set infercase
+endif
+
+" Nice statusbar
+set laststatus=2
+set statusline=
+set statusline+=%2*%-3.3n%0*\                " buffer number
+set statusline+=%f\                          " file name
+set statusline+=%h%1*%m%r%w%0*               " flags
+set statusline+=\[%{strlen(&ft)?&ft:'none'}, " filetype
+set statusline+=%{&encoding},                " encoding
+set statusline+=%{&fileformat}]              " file format
+set statusline+=\ %{fugitive#statusline()}   " fugitive
+if filereadable(expand("$VIM/vimfiles/plugin/vimbuddy.vim"))
+    set statusline+=\ %{VimBuddy()}          " vim buddy
+endif
+set statusline+=%=                           " right align
+set statusline+=%2*0x%-8B\                   " current char
+set statusline+=%-14.(%l,%c%V%)\ %<%P        " offset
+
+" Special statusbar for special windows
+if has("autocmd")
+  au FileType qf
+    \ if &buftype == "quickfix" |
+    \   setlocal statusline=%2*%-3.3n%0* |
+    \   setlocal statusline+=\ \[Compiler\ Messages\] |
+    \   setlocal statusline+=%=%2*\ %<%P |
+    \ endif
+
+  fun! <SID>FixMiniBufExplorerTitle()
+    if "-MiniBufExplorer-" == bufname("%")
+      setlocal statusline=%2*%-3.3n%0*
+      setlocal statusline+=\[Buffers\]
+      setlocal statusline+=%=%2*\ %<%P
+    endif
+  endfun
+
+  au BufWinEnter *
+    \ let oldwinnr=winnr() |
+    \ windo call <SID>FixMiniBufExplorerTitle() |
+    \ exec oldwinnr . " wincmd w"
+endif
+
+" Use the cool tab complete menu
+set wildmenu
+set wildignore+=*.o,*~,*.lo,*.pyc,*.pyo
+set suffixes+=.info,.aux,.log,.dvi,.bbl,.out,.o,.lo,.pyc,.pyo
+
+" Terminal and GUI settings
+if &term =~ "xterm" || &term =~ "screen-256color" || &term =~ "rxvt-unicode"
+  if &termencoding == ""
+    set termencoding=utf-8
+  endif
+
+  " Use xterm titles
+  if has("title")
+    set title
+  endif
+
+  " Change cursor colour depending upon mode
+  if exists('&t_SI')
+    let &t_SI = "\<Esc>]12;lightgoldenrod\x7"
+    let &t_EI = "\<Esc>]12;grey80\x7"
+  endif
+endif
+
+" Nice window title
+if has('title') && (has('gui_running') || &title)
+  set titlestring=
+  set titlestring+=%f\                                              " file name
+  set titlestring+=%h%m%r%w                                         " flags
+  set titlestring+=\ -\ %{v:progname}                               " program name
+  set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}  " working directory
+endif
+
+" No icky toolbar, menu or scrollbars in the GUI
+"if has('gui')
+"  set guioptions-=m " menubar
+"  set guioptions-=T " toolbar
+"  set guioptions-=l " left-hand scrollbar
+"  set guioptions-=L " left-hand scrollbar is present when there is a vertically split window
+"  set guioptions-=r " right-hand scrolbar
+"  set guioptions-=R " right-hand scrollbar is present ...
+"end
+
+" No pop-up windows!
+"if has('gui')
+"  set guioptions+=c
+"end
+
+if has("gui_gtk")
+  set guifont=Inconsolata\ 15
+elseif has("gui_running")
+  set guifont=-xos4-terminus-medium-r-normal-*-16-*-72-72-c-80-*-*
+endif
+
+" If possible and in gvim with inkpot, use cursor row highlighting
+if has("gui_running") && v:version >= 700
+  set cursorline
+end
+
+" Show tabs and trailing whitespace visually
+if (&termencoding == "utf-8") || has("gui_running")
+  if v:version >= 700
+    set list listchars=tab:»·,trail:·,extends:…,nbsp:‗
+  else
+    set list listchars=tab:»·,trail:·,extends:…
+  endif
+else
+  if v:version >= 700
+    set list listchars=tab:>-,trail:.,extends:>,nbsp:_
+  else
+    set list listchars=tab:>-,trail:.,extends:>
+  endif
+endif
+
+set fillchars=fold:-
+
+" Color settings
+if has('gui_running')
+  "let g:inkpot_black_background = 1
+  colorscheme inkpot
+  " GitGutter https://github.com/airblade/vim-gitgutter
+  if has('signs')
+    hi GitGutterAdd          gui=BOLD guifg=#009900  guibg=#2e2e37
+    hi GitGutterChange       gui=BOLD guifg=#bbbb00  guibg=#2e2e37
+    hi GitGutterDelete       gui=BOLD guifg=#ff2222  guibg=#2e2e37
+    hi GitGutterChangeDelete gui=BOLD guifg=#eeeeee  guibg=#2e2e37
+
+    hi SignColumn            gui=NONE guifg=#f0f0f8  guibg=#2e2e37
+  endif
+
+  " Gitv https://github.com/gregsexton/gitv/
+  hi diffAdded             gui=BOLD guifg=#80bf00  guibg=NONE
+  hi diffRemoved           gui=BOLD guifg=#bf0000  guibg=NONE
+elseif &t_Co > 88
+  colorscheme inkpot
+
+  " map a urxvt cube number to an xterm-256 cube number
+  fun! <SID>M(a)
+      return strpart("0135", a:a, 1) + 0
+  endfun
+
+  " map a urxvt colour to an xterm-256 colour
+  fun! <SID>X(a)
+      if &t_Co == 88
+          return a:a
+      else
+          if a:a == 8
+              return 237
+          elseif a:a < 16
+              return a:a
+          elseif a:a > 79
+              return 232 + (3 * (a:a - 80))
+          else
+              let l:b = a:a - 16
+              let l:x = l:b % 4
+              let l:y = (l:b / 4) % 4
+              let l:z = (l:b / 16)
+              return 16 + <SID>M(l:x) + (6 * <SID>M(l:y)) + (36 * <SID>M(l:z))
+          endif
+      endif
+  endfun
+
+  " GitGutter https://github.com/airblade/vim-gitgutter
+  if has('signs')
+    exec "hi GitGutterAdd           cterm=BOLD ctermfg=" . <SID>X(20) . " ctermbg=" . "NONE"
+    exec "hi GitGutterChange        cterm=BOLD ctermfg=" . <SID>X(17) . " ctermbg=" . "NONE"
+    exec "hi GitGutterDelete        cterm=BOLD ctermfg=" . <SID>X(32) . " ctermbg=" . "NONE"
+    exec "hi GitGutterChangeDelete  cterm=BOLD ctermfg=" . <SID>X(87) . " ctermbg=" . "NONE"
+
+    exec "hi SignColumn             cterm=NONE ctermfg=NONE ctermbg=NONE"
+  endif
+
+  " Gitv https://github.com/gregsexton/gitv
+  exec "hi diffRemoved      cterm=BOLD ctermfg=" . <SID>X(48) . " ctermbg=" . "NONE"
+  exec "hi diffAdded        cterm=BOLD ctermfg=" . <SID>X(28) . " ctermbg=" . "NONE"
+else
+  colorscheme desert
+endif
+
+if has("eval")
+  " Cscope settings
+  if has('cscope')
+    set csto=0
+    set cscopetag
+    set cscopeverbose
+    if filereadable("cscope.out")
+      cs add cscope.out
+    elseif $CSCOPE_DB != ""
+      cs add $CSCOPE_DB
+    end
+  end
+
+  " Jedi
+  let g:loaded_jedi = 1 " FIXME
+
+  " Latex
+  let g:tex_flavor = "latex"
+  let g:Tex_UseMakefile = 1
+  let g:Tex_DefaultTargetFormat = 'pdf'
+  let g:Tex_ViewRule_pdf = 'xdg-open'
+  "let g:Tex_CompileRule_pdf = 'lualatex -interaction=nonstopmode $*'
+
+  " Netrw
+  let g:netrw_sort_sequence = "[\/]$,*,\.bak$,\.o$,\.h$,\.info$,\.pyc,\.pyo,\.swp$,\.obj$"
+  let g:netrw_list_hide='^\.,\~$'
+
+  " Settings for :TOhtml
+  let html_number_lines=0
+  let html_use_css=1
+  let use_xhtml=1
+
+  " Exheres Syntax
+  let g:exheres_author_name="Ali Polatel <alip@exherbo.org>"
+
+  " Man.vim
+  " make :Man command avaliable
+  source $VIMRUNTIME/ftplugin/man.vim
+  " Strip ANSI color sequences using sed
+  let $MANPAGER = "sed -e 's:\\x1B\\[[[:digit:]]\\+m::g'"
+
+  " Vimchant
+  let g:vimchant_spellcheck_lang = "tr"
+
+  " Taglist.vim
+  let Tlist_Use_Right_Window=0
+  let Tlist_Auto_Open=0
+  let Tlist_Enable_Fold_Column=0
+  let Tlist_Compact_Format=1
+  let Tlist_WinWidth=28
+  let Tlist_Exit_OnlyWindow=1
+  let Tlist_File_Fold_Auto_Close = 1
+  nnoremap <silent> <F8> :TlistToggle<CR>
+  nnoremap <silent> <F9> :TlistSync<CR>
+
+  " minibufexpl.vim
+  let loaded_minibufexplorer = 1
+  let g:miniBufExplModSelTarget = 1
+  let g:miniBufExplWinFixHeight = 1
+  let g:miniBufExplWinMaxSize = 1
+  let g:miniBufExplUseSingleClick = 1
+  let g:miniBufExplMapWindowNavVim = 1
+  let g:miniBufExplMapWindowNavArrows = 1
+  let g:miniBufExplMapCTabSwitchBufs = 1
+  hi MBEVisibleActive guifg=#A6DB29 guibg=fg
+  hi MBEVisibleChangedActive guifg=#F1266F guibg=fg
+  hi MBEVisibleChanged guifg=#F1266F guibg=fg
+  hi MBEVisibleNormal guifg=#5DC2D6 guibg=fg
+  hi MBEChanged guifg=#CD5907 guibg=fg
+  hi MBENormal guifg=#808080 guibg=fg
+
+  " secure_modelines.vim
+  set nomodeline
+  let g:secure_modelines_verbose = 1
+  let g:secure_modelines_modelines = 5
+  let g:secure_modelines_allowed_items = [
+    \ "autoindent",   "ai",   "noautindent", "noai",
+    \ "cindent",      "cin",  "nocindent", "nocin",
+    \ "textwidth",    "tw",
+    \ "softtabstop",  "sts",
+    \ "tabstop",      "ts",
+    \ "shiftround",   "sr",
+    \ "shiftwidth",   "sw",
+    \ "smarttab",     "sta",
+    \ "expandtab",    "et",   "noexpandtab", "noet",
+    \ "encoding",     "enc",
+    \ "fileencoding", "fenc",
+    \ "fileformat",   "ff",
+    \ "filetype",     "ft",
+    \ "foldmethod",   "fdm",
+    \ "formatoptions", "fo",
+    \ "readonly",     "ro",   "noreadonly", "noro",
+    \ "rightleft",    "rl",   "norightleft", "norl",
+    \ "smartindent",  "si",
+    \ "spell",                "nospell",
+    \ "spelllang",    "spl",
+    \ "syntax",       "syn",
+    \ "wrap",                 "nowrap"
+    \ ]
+
+  " clibs.vim
+  let c_hi_identifiers = 'all'
+  let c_hi_libs        = ['*']
+
+  " LargeFile.vim
+  let g:LargeFile = 32
+endif
+
+" Filter expected errors from make
+if has("eval") && v:version >= 700
+    if hostname() == "hayalet"
+        let &makeprg="env LANG=en_GB.UTF-8 nice -n7 make -j4 2>&1"
+    endif
+
+    " ignore libtool links with version-info
+    let &errorformat="%-G%.%#libtool%.%#version-info%.%#,".&errorformat
+
+    " ignore doxygen things
+    let &errorformat="%-G%.%#Warning: %.%# is not documented.,".&errorformat
+    let &errorformat="%-G%.%#Warning: no uniquely matching class member found for%.%#,".&errorformat
+    let &errorformat="%-G%.%#Warning: documented function%.%#was not declared or defined.%.%#,".&errorformat
+endif
+
+" C indentation flavours
+fun! <SID>GnuCIndent()
+  setlocal shiftwidth=2
+  setlocal tabstop=8
+  setlocal cindent
+  setlocal cinoptions=>4,n-2,{2,^-2,:2,=2,g0,h2,p5,t0,+2,(0,u0,w1,m1
+endfun
+
+fun! <SID>LinuxCIndent()
+  setlocal textwidth=80
+  setlocal shiftwidth=8
+  setlocal softtabstop=8
+  setlocal autoindent cindent
+  "setlocal cinkeys=0{,0},0),0#,!<Tab>,;,:,o,O,e
+  setlocal cinoptions=:0,(0,u0,W1s
+  setlocal formatoptions=tcqlron
+  "setlocal formatprg=astyle\ -A8T8
+  if exists("+colorcolumn")
+    setlocal colorcolumn=+1
+    hi link ColorColumn Error
+  endif
+endfun
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+                  \ | wincmd p | diffthis
+
+" Autocommands
+if has("eval")
+  " If we're in a wide window, enable line numbers.
+  fun! <SID>WindowWidth()
+      if winwidth(0) > 90
+          setlocal foldcolumn=2
+          setlocal number
+      else
+          setlocal nonumber
+          setlocal foldcolumn=0
+      endif
+  endfun
+
+  " Force active window to the top of the screen without losing its size.
+  fun! <SID>WindowToTop()
+      let l:h=winheight(0)
+      wincmd K
+      execute "resize" l:h
+  endfun
+
+  fun! <SID>check_pager_mode()
+    if exists("g:loaded_less") && g:loaded_less
+      " we're in vimpager / less.sh / man mode
+      set laststatus=0
+      set ruler
+      set foldmethod=manual
+      set foldlevel=99
+      set nolist
+    endif
+  endfun
+
+  fun! <SID>check_man_mode()
+    if exists("s:man_tag_depth")
+      setlocal laststatus=0
+      setlocal ruler
+      setlocal foldmethod=manual
+      setlocal foldlevel=99
+      setlocal nolist
+    endif
+  endfun
+endif
+
+if has("autocmd")
+  " Global autocommands
+  augroup vimrcEx
+    au!
+
+    " Automagic line numbers
+    au BufEnter * call <SID>WindowWidth()
+
+    " Always do a full syntax refresh
+    au BufEnter * syntax sync fromstart
+
+    " For help files, move them to the top window and make <Return>
+    " behave like <C-]> (jump to tag)
+    au FileType help call <SID>WindowToTop()
+    au FileType help nmap <buffer> <Return> <C-]>
+
+    " Check for pager and man modes
+    autocmd BufEnter * call <SID>check_man_mode()
+    autocmd VimEnter * call <SID>check_pager_mode()
+
+    " When editing a file, always jump to the last known cursor position.
+    " Don't do it when the position is invalid or when inside an event handler
+    " (happens when dropping a file on gvim).
+    autocmd BufReadPost *
+          \ if ! exists("g:leave_my_cursor_position_alone") |
+          \     if line("'\"") > 0 && line ("'\"") <= line("$") |
+          \         exe "normal g'\"" |
+          \     endif |
+          \ endif
+
+    " Automatically open, but do not go to (if there are errors) the quickfix / location list
+    " window, or close it when is has become empty.
+    autocmd QuickFixCmdPost [^l]* nested cwindow
+    autocmd QuickFixCmdPost    l* nested lwindow
+
+    try
+      au Syntax *
+            \ syn match VimModelineLine /^.\{-1,}vim:[^:]\{-1,}:.*/ contains=VimModeline |
+            \ syn match VimModeline contained /vim:[^:]\{-1,}:/
+      hi def link VimModelineLine comment
+      hi def link VimModeline     special
+    catch
+    endtry
+  augroup END
+
+  augroup exheres
+    au!
+
+    au FileType exheres-0
+      \ let is_bash=1         |
+      \ setfiletype sh        |
+      \ setlocal expandtab    |
+      \ setlocal tabstop=4    |
+      \ setlocal shiftwidth=4 |
+      \ setlocal textwidth=80
+  augroup END
+
+  augroup haskell
+    au!
+
+    au FileType haskell,chaskell,lhaskell
+      \ setlocal expandtab      |
+      \ setlocal tabstop=4      |
+      \ setlocal softtabstop=4  |
+      \ setlocal shiftwidth=4   |
+      \ setlocal textwidth=80
+  augroup END
+
+  augroup lua
+    au!
+
+    au BufRead,BufNewFile *.nse
+      \ setlocal filetype=lua
+
+    au FileType lua
+      \ setlocal expandtab     |
+      \ setlocal tabstop=4     |
+      \ setlocal softtabstop=4 |
+      \ setlocal shiftwidth=4  |
+      \ setlocal textwidth=80
+
+    au BufNewFile *.lua
+      \ 0put ='#!/usr/bin/env lua' |
+      \ norm G
+  augroup END
+
+  augroup python
+    au!
+
+    au FileType python
+      \ setlocal expandtab     |
+      \ setlocal shiftwidth=4  |
+      \ setlocal tabstop=4     |
+      \ setlocal softtabstop=4 |
+      \ setlocal textwidth=80
+
+    au BufNewFile *.py
+      \ 0put ='# coding: utf-8'       |
+      \ 0put ='#!/usr/bin/env python' |
+      \ norm G
+  augroup END
+
+  augroup ruby
+    au!
+
+    au FileType ruby
+      \ setlocal shiftwidth=2  |
+      \ setlocal tabstop=2     |
+      \ setlocal softtabstop=2 |
+      \ setlocal expandtab     |
+      \ setlocal nowrap
+
+    au BufNewFile *.rb
+      \ 0put ='# coding: utf-8'     |
+      \ 0put ='#!/usr/bin/env ruby' |
+      \ norm G
+  augroup END
+
+  " Markdown
+  augroup markdown
+    au!
+
+    au FileType markdown
+      \ setlocal expandtab     |
+      \ setlocal shiftwidth=4  |
+      \ setlocal tabstop=4     |
+      \ setlocal softtabstop=4 |
+      \ setlocal textwidth=80
+
+    au BufNewFile *.markdown
+      \ if match(getcwd(), '/alip.github.com') != -1 |
+      \   0put ='' |
+      \   0put ='[kaotik/](https://groups.google.com/forum/?fromgroups=#!topic/kaotik/)' |
+      \   0put ='' |
+      \   0put ='---' |
+      \   0put ='lang: tr' |
+      \   0put ='tags: []' |
+      \   0put ='categories: [tr, blog]' |
+      \   0put ='title: ' |
+      \   0put ='layout: post' |
+      \   0put ='---' |
+      \   norm G |
+      \ endif
+  augroup END
+
+  augroup html
+    au!
+
+    au BufRead,BufNewFile *.css,*.css.in,*.html,*.html.in setlocal et ts=2 sts=2 sw=2 tw=0 fdm=marker fmr=@group,@end
+    au BufRead,BufNewFile *.html setfiletype liquid
+  augroup END
+
+  augroup gitcommit
+    au!
+
+    autocmd BufNewFile,BufRead COMMIT_EDITMSG setfiletype gitcommit
+  augroup END
+
+  augroup c
+    au!
+
+    au FileType c,cpp
+      \ let g:c_gnu=1                               |
+      \ let g:c_space_errors=1                      |
+      \ setlocal fileformat=unix                    |
+      \ setlocal foldmethod=syntax                  |
+      \ setlocal foldcolumn=4                       |
+      \ setlocal smarttab                           |
+      \ if match(getcwd(), '/notmuch') != -1        |
+      \   call <SID>GnuCIndent()                    |
+      \   setlocal shiftwidth=4                     |
+      \ elseif match(getcwd(), '/pinktrace') != -1  |
+      \   call <SID>LinuxCIndent()                  |
+      \ elseif match(getcwd(), '/sydbox') != -1     |
+      \   call <SID>LinuxCIndent()                  |
+      \ else                                        |
+      \   call <SID>LinuxCIndent()                  |
+      \ endif
+
+    " Abbreviations
+    au FileType c,cpp :iabbrev #i #include
+    au FileType c,cpp :iabbrev #d #define
+  augroup END
+
+  augroup latex
+    au!
+
+    " For latexsuite
+    au BufRead,BufNewfile *.tex,*.ltx,*.sty,*.cls
+      \ setlocal grepprg=grep\ -nH\ $*
+  augroup END
+
+  augroup bash
+    au!
+
+    au FileType sh
+      \ let g:is_bash = 1       |
+      \ setlocal expandtab      |
+      \ setlocal shiftwidth=4   |
+      \ setlocal softtabstop=4  |
+      \ setlocal textwidth=80
+
+    au BufNewFile *.sh
+      \ 0put ='#!/bin/sh' |
+      \ norm G
+    au BufNewFile *.bash
+      \ 0put ='#!/usr/bin/env bash' |
+      \ norm G
+    au BufNewFile *.zsh
+      \ 0put ='#!/usr/bin/env zsh' |
+      \ norm G
+  augroup END
+
+  augroup vim
+    au!
+
+    au FileType vim
+      \ setlocal expandtab     |
+      \ setlocal textwidth=100 |
+      \ setlocal shiftwidth=2  |
+      \ setlocal tabstop=2     |
+      \ setlocal softtabstop=2
+
+  " xz
+  augroup xz
+    au!
+
+    au BufReadPre,FileReadPre     *.xz setlocal bin
+    au BufReadPost,FileReadPost   *.xz call gzip#read("xz -d")
+    au BufWritePost,FileWritePost *.xz call gzip#write("xz")
+    au FileAppendPre              *.xz call gzip#appre("xz -d")
+    au FileAppendPost             *.xz call gzip#write("xz")
+  augroup END
+
+  " SPL Playlists
+  augroup spl
+    au!
+
+    au BufRead,BufNewFile *.spl
+      \ setlocal bomb                  |
+      \ setlocal fileformat=dos        |
+      \ setlocal fileencoding=utf-16le
+  augroup END
+
+  " Chuck Programming Language
+  augroup ck
+    au!
+
+    au BufRead,BufNewFile *.ck
+      \ setlocal filetype=ck
+
+  augroup END
+endif
+
+" Final commands
+if has("autocmd")
+  au VimEnter * nohls
+endif
