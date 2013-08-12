@@ -16,6 +16,7 @@ CONFIGS = \
 	hgrc \
 	tmux.conf \
 	vimrc \
+	wgetpaste.conf \
 	zprofile \
 	zshenv \
 	zshrc \
