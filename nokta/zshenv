@@ -1,0 +1,107 @@
+# alip's zshenv
+# vim: set et sw=4 sts=4 ts=4 ft=zsh :
+
+# Global Order: zshenv, zprofile, zshrc, zlogin
+
+# Language settings etc.
+[[ -r /etc/environment ]] && source /etc/environment
+# Locale
+# XXX: eval unset ${!LC_*} LANG
+#unset LC_ALL
+export LC_ALL="tr_TR.UTF-8"
+export LANG="tr_TR.UTF-8"
+export LC_COLLATE="C"
+export LC_CTYPE="tr_TR.UTF-8"
+
+# Timezone
+if [[ -z "${TZ}" ]] ; then
+    export TZ=Europe/Istanbul
+fi
+
+# Set environment variables (important for autologin on tty)
+export HOSTNAME=${HOSTNAME:-$(hostname)}
+
+# make sure /usr/bin/id is available
+if [[ -x /usr/bin/id ]] ; then
+    [[ -z "$USER" ]]        && export USER=$(/usr/bin/id -un)
+    [[ $LOGNAME == LOGIN ]] && LOGNAME=$(/usr/bin/id -un)
+fi
+
+# set $PATH
+if [[ -r /etc/arch-release ]]; then
+    [[ -r /etc/profile ]] && emulate sh -c 'source /etc/profile' 
+elif [[ -r /etc/gentoo-release ]] ; then
+    [[ -r /etc/profile.env ]] && source /etc/profile.env
+else
+    # a sane default
+    if (( EUID != 0 )); then
+        PATH="/bin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/games:/usr/NX/bin:$PATH"
+    else
+        PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/X11R6/bin:/usr/local/sbin:/usr/local/bin:/usr/NX/bin:$PATH"
+    fi
+fi
+
+# Solaris
+case $(uname 2>/dev/null) in
+  SunOS)
+     PATH="/usr/bin:/usr/sbin:/usr/ccs/bin:/opt/SUNWspro/bin:/usr/ucb:/usr/sfw/bin:/usr/gnu/bin:/usr/openwin/bin:/opt/csw/bin:/opt/swf/bin:/sbin:/usr/sbin:~/bin"
+     # LD_LIBRARY_PATH="/opt/csw/lib:/opt/sfw/lib:/usr/lib:/usr/local/lib:/usr/ccs/lib:/usr/openwin/lib:/usr/ucb/lib"
+     # MANPATH="$MANPATH:/opt/csw/man:/usr/man:/usr/share/man:/usr/local/man:/opt/sfw/man"
+esac
+
+# less (:=pager) options:
+#  export LESS=C
+if [[ -x /usr/bin/lesspipe.sh ]] ; then
+    export LESSOPEN="|lesspipe.sh %s"
+elif [[ -x /usr/bin/lesspipe ]] ; then
+    export LESSOPEN="|lesspipe %s"
+fi
+export READNULLCMD=${PAGER:-/usr/bin/pager}
+
+# xterm 256 colours
+if [[ "$TERM" == "xterm" ]]; then
+    export TERM="xterm-256color"
+fi
+
+# rest is for non-root
+(( EUID == 0 )) && return 0
+
+export PATH="$PATH:$HOME/bin:$HOME/.cabal/bin:$HOME/.local/bin"
+export MANPATH="$MANPATH:/usr/local/man:$HOME/.local/man:$HOME/.local/share/man"
+export INFOPATH="$INFOPATH:$HOME/.local/info:$HOME/.local/share/info"
+
+# Path for pkg-config
+export PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/lib64/pkgconfig:/lib/pkgconfig:$PKG_CONFIG_PATH"
+export PKG_CONFIG_PATH="$HOME/.local/lib64/pkgconfig:$HOME/.local/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+export MPD_HOST="localhost"
+export JACK_START_SERVER=YesPlease
+export AUDIODRIVER=alsa
+export SDL_AUDIODRIVER=alsa
+export XAPIAN_PREFER_CHERT=YesPlease
+
+# TeXlive 2012
+#TEXLIVE_VER=2012
+#PLATFORM_NAME="$(uname -m)-$(uname -s | tr '[[:upper:]]' '[[:lower:]]')"
+#if [[ -d "/usr/local/texlive/${TEXLIVE_VER}" ]]; then
+#    export PATH="/usr/local/texlive/${TEXLIVE_VER}/bin/${PLATFORM_NAME}:${PATH}"
+#    export INFOPATH="/usr/local/texlive/2012/texmf/doc/info:${INFOPATH}"
+#    export MANPATH="/usr/local/texlive/2012/texmf/doc/man:${MANPATH}"
+#fi
+#unset TEXLIVE_VER
+#unset PLATFORM_NAME
+
+export NOPASTE_SERVICES="ssh Gist"
+export NOPASTE_SSH_SERVER=bach.exherbo.org
+export NOPASTE_SSH_DOCROOT=public_html/tmp
+export NOPASTE_SSH_WEBPATH=http://dev.exherbo.org/~alip/tmp
+export NOPASTE_SSH_MODE=0644
+
+# ruby
+if [[ -d "$HOME/.gem/ruby/2.0.0/bin" ]]; then
+    PATH="$HOME/.gem/ruby/2.0.0/bin:$PATH"
+elif [[ -d "$HOME/.gem/ruby/1.9/bin" ]]; then
+    PATH="$HOME/.gem/ruby/1.9/bin:$PATH"
+elif [[ -d "$HOME/.gem/ruby/1.8/bin" ]]; then
+    PATH="$HOME/.gem/ruby/1.8/bin:$PATH"
+fi

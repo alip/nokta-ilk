@@ -1,0 +1,138 @@
+# alip's zshrc.local
+# vim: set et sw=4 sts=4 ts=4 ft=zsh fdm=marker :
+
+# enchancements to grml's default .zshrc
+export LESS_TERMCAP_so=$'\E[01;44;40m'
+
+# xargs alternative
+zrcautoload zargs
+
+# It's a kind of magic!
+zrcautoload url-quote-magic
+zle -N self-insert url-quote-magic
+
+# Interactive comments (ctrl-a and comment away history)
+setopt interactivecomments
+
+# This set of functions implements a sort of magic history searching.
+# After predict-on, typing characters causes the editor to look backward
+# in the history for the first line beginning with what you have typed so
+# far. After predict-off, editing returns to normal for the line found.
+# In fact, you often don't even need to use predict-off, because if the
+# line doesn't match something in the history, adding a key performs
+# standard completion - though editing in the middle is liable to delete
+# the rest of the line.
+zrcautoload predict-on
+zle -N predict-on
+zle -N predict-off
+#bindkey "^X^Z" predict-on
+#bindkey "^Z" predict-off
+
+# timezone
+export TZ="${TZ:-Europe/Istanbul}"
+
+# don't want these commands in history
+alias pwsafe=' pwsafe'
+
+# global aliases
+alias -g L='| less'
+alias -g H='| source-highlight -f esc256 -s shell'
+
+# tmpdir (TODO: monthly tmpdirs)
+#if [[ -d "$HOME"/.tmp ]]; then
+#    export TMPDIR="$HOME"/.tmp
+#elif [[ -d "$HOME"/tmp ]]; then
+#    export TMPDIR="$HOME"/tmp
+#fi
+
+# mail
+MAILCHECK=0
+if [[ -d "$HOME"/.maildir ]]; then
+    export MAIL=$HOME/.maildir
+fi
+
+# ack is better than grep!
+export ACK_PAGER_COLOR=${PAGER:-less}
+
+# gcc
+export CFLAGS="-D__ALIP_WAS_HERE -g -ggdb3 -O2 -march=native -D__PINK_IS_BEHIND_THE_WALL"
+export CXXFLAGS="${CFLAGS}"
+
+# cave
+export CAVE_RESOLVE_OPTIONS="--resume-file $HOME/.cave-resume -Rw -Cs --via-binary */* --one-binary-per-slot"
+export CAVE_RESUME_OPTIONS="--resume-file $HOME/.cave-resume"
+export CAVE_SEARCH_OPTIONS="--index /home/paludisbuild/cache/index"
+
+# PATH
+if [[ -d "$HOME"/bin ]]; then
+    PATH="$HOME/bin:$PATH"
+fi
+if [[ -d "$HOME"/cxoffice/bin ]]; then
+    PATH="$HOME/cxoffice/bin:$PATH"
+fi
+if [[ -d "$HOME"/.local/bin ]]; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+if [[ -d /usr/local/bin ]]; then
+    PATH="/usr/local/bin:$PATH"
+fi
+if [[ -d /sbin ]]; then
+    PATH="/sbin:$PATH"
+fi
+if [[ -d /usr/sbin ]]; then
+    PATH="/usr/sbin:$PATH"
+fi
+
+# rest is for non-root
+(( EUID == 0 )) && return 0
+
+# useful aliases
+alias whysynth='DSSI_PATH={$DSSI_PATH:-/usr/lib/dssi} ghostess whysynth.so'
+
+# enable core-dumps
+ulimit -c unlimited
+
+if [[ -n "$DISPLAY" ]]; then
+    if check_com -c firefox; then
+        export BROWSER=firefox
+        export MOZILLA_NEWTYPE=tab
+    fi
+else
+    if check_com -c elinks; then
+        export BROWSER=elinks
+    elif check_com -c w3m; then
+        export BROWSER=w3m
+    elif check_com -c links; then
+        export BROWSER=links
+    fi
+fi
+
+# compiler cache
+if check_com -c ccache; then
+    if [[ -d /usr/lib64/ccache ]]; then
+        PATH=/usr/lib64/ccache:"$PATH"
+    elif [[ -d /usr/lib/ccache ]]; then
+        PATH=/usr/lib64/ccache:"$PATH"
+    elif [[ -d /usr/libexec/ccache ]]; then
+        PATH=/usr/libexec/ccache:"$PATH"
+    fi
+
+    export CCACHE_DIR="$HOME"/.cache/ccache
+    export CCACHE_UMASK=002
+    unset CCACHE_HARDLINK
+fi
+
+export SDL_AUDIODRIVER="pulse"
+if [[ -e /usr/lib/libvdpau/libvdpau_nouveau.so ]]; then
+    export VDPAU_DRIVER="nouveau"
+fi
+
+if [[ -z "${SSH_AGENT_PID}" ]] && check_com -c keychain; then
+    eval $(keychain --quiet --eval id_dsa | sed -e 's,;,\n,g' )
+fi
+
+if check_com -c pint; then
+    function pint_top() {
+        command pint | command grep "[1-9][0-9] minute" -B 1 | command grep -v '^--$'
+    }
+fi

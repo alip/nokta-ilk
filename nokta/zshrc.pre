@@ -1,0 +1,8 @@
+# alip's zshrc.pre
+# vim: set et sw=4 sts=4 ts=4 ft=zsh fdm=marker :
+
+# activate battery status!
+BATTERY=1
+
+# enable caching for completion
+command mkdir -p -m 700 "$HOME"/.zsh/cache
