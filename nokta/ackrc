@@ -1,0 +1,20 @@
+# alip's ackrc
+
+# Less is cool!
+--pager=LESS=FSRX less -r
+
+# Like vim's smartcase
+--smart-case
+
+# Define some new types
+--type-set=auto=.ac,.am,.m4
+--type-set=ebuild=.eclass,.ebuild
+--type-set=exheres=.exlib,.exheres-0
+--type-set=m4=.m4
+--type-set=markdown=.md,.mkd,.mmd,.markdown,.pdc
+--type-set=nse=.lua,.nse
+--type-set=txt=.txt
+--type-set=zsh=.zsh
+
+# Ignore some more
+--ignore-dir=build,build-aux
