@@ -1,0 +1,67 @@
+! Xdefaults of hayalet
+! vim: set ft=xdefaults :
+
+! Fix the Xft dpi to 96; this prevents tiny fonts
+! or HUGE fonts depending on the screen size.
+Xft*dpi: 96
+
+! hintstyle: medium means that (for Postscript fonts) we
+! position the stems for maximum constrast and consistency
+! but do not force the stems to integral widths. hintnone,
+! hintslight, and hintfull are the other possibilities.
+Xft*hintstyle: hintmedium
+Xft*hinting: true
+Xft*rgba: rgb
+Xft*antialias: true
+
+URxvt*.termName: rxvt-unicode-256color
+URxvt*.loginShell: true
+URxvt*.urgentOnBell: true
+URxvt*.visualBell: true
+URxvt*.cursorBlink: false
+URxvt*.boldFont: xft:Inconsolata:pixelsize=16
+URxvt*.font: xft:Inconsolata:pixelsize=16
+URxvt*.foreground: light grey
+URxvt*.background: grey13
+URxvt*.color7: light grey
+URxvt*.color4: alice blue
+URxvt*.color12: cornflower blue
+URxvt*.color11: gold
+URxvt*.color3: chocolate
+URxvt*.scrollTtyKeypress: true
+URxvt*.scrollTtyOutput: false
+URxvt*.mouseWheelScrollPage: true
+URxvt*.perl-ext-common: default,matcher,searchable-scrollback<M-Up>
+URxvt*.urlLauncher: xdg-open
+URxvt*.matcher*button: 2
+URxvt*.iconFile: /usr/share/icons/oxygen/32x32/apps/utilities-terminal.png
+URxvt*.externalBorder: false
+URxvt*.cutchars: `&()*,;<=>?@[]{|}
+URxvt*.saveLines: 32000
+
+!XTerm*.toolBar: false
+!XTerm*.foreground: white
+!XTerm*.background: grey5
+!XTerm*.color4: royalblue
+!XTerm*.color12: steelblue
+!XTerm*.color11: gold
+!XTerm*.color3: chocolate
+!XTerm*.boldFont: -xos4-terminus-bold-r-normal--20-200-72-72-c-100-iso10646-1
+!XTerm*.font: -xos4-terminus-medium-r-normal--20-200-72-72-c-100-iso10646-1
+!XTerm*.multiScroll: true
+!XTerm*.saveLines: 10000
+!XTerm*.showBlinkAsBold: true
+!XTerm*.utf8: 1
+!XTerm*.visualBell: true
+!XTerm*.selectToClipboard: true
+!XTerm*.On2Clicks: word
+! python -c 'print ",".join(map(lambda x: "%d:48" % ord(x), "`&()*,;:-<=>?@[]{|}/\\."))'
+!XTerm*.CharClass: 96:48,38:48,40:48,41:48,42:48,44:48,59:48,58:48,45:48,60:48,61:48,62:48,63:48,64:48,91:48,93:48,123:48,124:48,125:48,47:48,92:48,46:48
+
+XVkbd.customization: -turkish
+XVkbd.alwaysOnTop: True
+XVkbd.compact: True
+XVkbd*title: xvkbd - Sanal Klavye (Türkçe)
+XVkbd*windowGeometry: 400x300
+XVkbd*generalFont: -misc-dejavu sans-*-r-normal--17-120-100-100-p-0-iso8859-9
+XVkbd*letterFont: -misc-dejavu sans-*-r-normal--17-120-100-100-p-0-iso8859-9
