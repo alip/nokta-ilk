@@ -3,6 +3,7 @@ INSTALL = install -p -m 600 -D
 CONFIGS = \
 	Makefile \
 	asoundrc-hayalet \
+	conkyrc-hayalet
 	Xresources-hayalet \
 	ackrc \
 	gdbinit \
@@ -25,6 +26,9 @@ clean :
 
 install-file-asoundrc-hayalet : asoundrc-hayalet
 	test `hostname` != 'hayalet' || $(INSTALL) $< $(HOME)/.asoundrc
+
+install-file-conkyrc-hayalet : conkyrc-hayalet
+	test `hostname` != 'hayalet' || $(INSTALL) $< $(HOME)/.conkyrc
 
 install-file-Xresources-hayalet : Xresources-hayalet
 	test `hostname` != 'hayalet' || $(INSTALL) $< $(HOME)/.Xresources

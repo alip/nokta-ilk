@@ -1,0 +1,89 @@
+# alip's conkyrc for awesome WM
+# vim: set ft=conkyrc :
+
+extra_newline yes
+out_to_console yes
+
+background no
+#double_buffer yes
+#own_window no
+#own_window_transparent yes
+#own_window_type desktop
+
+no_buffers yes
+
+update_interval 3
+update_interval_on_battery 10
+
+music_player_interval 13
+mpd_host /home/alip/.mpd/mpd.socket
+
+if_up_strictness address
+
+# ${if_match "${mpd_status}" == "Playing"}
+TEXT
+update_cpu_widget(${cpu})
+update_mem_widget(${memperc})
+update_hd_read_widget[[${diskio_read /dev/sda}]]
+update_hd_write_widget[[${diskio_write /dev/sda}]]
+${if_up wlp2s0}
+update_down_widget[[${downspeed wlp2s0}]]
+update_up_widget[[${upspeed wlp2s0}]]
+${else}${if_up wlan1}
+update_down_widget[[${downspeed wlan1}]]
+update_up_widget[[${upspeed wlan1}]]
+${else}${if_up wlan0}
+update_down_widget[[${downspeed wlan0}]]
+update_up_widget[[${upspeed wlan0}]]
+${else}${if_up eth0}
+update_down_widget[[${downspeed eth0}]]
+update_up_widget[[${upspeed eth0}]]
+${else}
+update_down_widget[[0B]]
+update_up_widget[[0B]]
+${endif}${endif}${endif}${endif}
+mywidgets.info:set_markup[[\
+<span font_desc="terminus">\
+<span color="cyan">Up:</span><span color="green">${uptime_short}</span> \
+<span color="cyan">L:</span><span color="green">${loadavg}</span> \
+<span color="cyan">C:</span><span color="green">${cpu}%</span> \
+<span color="cyan">M:</span><span color="green">${memperc}%,${swapperc}%</span> \
+<span color="cyan">IO:</span><span color="green">${diskio_read /dev/sda},${diskio_write /dev/sda}</span> \
+<span color="cyan">B:</span><span color="green">${battery} (${battery_time})</span> \
+${if_up wlan1}\
+<span color="cyan">N:</span><span color="green">${downspeed wlan1}:${upspeed wlan1}</span> \
+<span color="cyan">e:</span><span color="magenta">${wireless_essid wlan1}</span> \
+<span color="cyan">b:</span><span color="green">${wireless_bitrate wlan1}</span> \
+<span color="cyan">q:</span><span color="green">${wireless_link_qual wlan1}%</span>\
+${else}\
+${if_up wlan0}\
+<span color="cyan">N:</span><span color="green">${downspeed wlan0}:${upspeed wlan0}</span> \
+<span color="cyan">e:</span><span color="magenta">${wireless_essid wlan0}</span> \
+<span color="cyan">b:</span><span color="green">${wireless_bitrate wlan0}</span> \
+<span color="cyan">q:</span><span color="green">${wireless_link_qual wlan0}%</span>\
+${else}\
+${if_up eth0}\
+<span color="cyan">N:</span><span color="green">${downspeed eth0}:${upspeed eth0}</span>\
+${else}\
+<span color="cyan">N:</span><span color="green">?:?</span>\
+${endif}\
+${endif}\
+${endif}\
+</span>]]
+${if_mpd_playing}
+update_mpd_progress(${mpd_percent})
+update_mpd_bitrate(${mpd_bitrate})
+mywidgets.mpd:set_markup[[<span font_desc="monospace"><span color="magenta">]] .. \
+awful.util.escape([[${mpd_smart 45}]]) .. "</span> " .. \
+[[<span color="cyan">p:</span><span color="green">${mpd_percent}%</span> \
+<span color="cyan">v:</span>\
+<span color="green">${mpd_vol}%</span> \
+<span color="cyan">b:</span><span color="green">${mpd_bitrate}kbps</span> \
+<span color="cyan">repeat:</span><span color="green">${mpd_repeat}</span> \
+<span color="cyan">random:</span><span color="green">${mpd_random}</span> \
+</span>]]
+${else}
+update_mpd_progress(0)
+update_mpd_bitrate(0)
+mywidgets.mpd:set_text[[Not Playing]]
+${endif}
