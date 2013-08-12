@@ -97,11 +97,9 @@ export NOPASTE_SSH_DOCROOT=public_html/tmp
 export NOPASTE_SSH_WEBPATH=http://dev.exherbo.org/~alip/tmp
 export NOPASTE_SSH_MODE=0644
 
-# ruby
-if [[ -d "$HOME/.gem/ruby/2.0.0/bin" ]]; then
-    PATH="$HOME/.gem/ruby/2.0.0/bin:$PATH"
-elif [[ -d "$HOME/.gem/ruby/1.9/bin" ]]; then
-    PATH="$HOME/.gem/ruby/1.9/bin:$PATH"
-elif [[ -d "$HOME/.gem/ruby/1.8/bin" ]]; then
-    PATH="$HOME/.gem/ruby/1.8/bin:$PATH"
+# Ruby
+GEMS_BIN=$(ruby -rubygems -e "puts Gem.user_dir")/bin
+if [[ -d "$GEMS_BIN" ]]; then
+    PATH="$GEMS_BIN:$PATH"
 fi
+unset GEMS_BIN
