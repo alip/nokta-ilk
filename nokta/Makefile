@@ -14,6 +14,7 @@ CONFIGS = \
 	gitignore \
 	gitk \
 	hgrc \
+	tmux.conf \
 	vimrc \
 	zprofile \
 	zshenv \
