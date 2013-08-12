@@ -7,6 +7,7 @@ CONFIGS = \
 	Xresources-hayalet \
 	ackrc \
 	dir_colors \
+	enchant \
 	gdbinit \
 	gitconfig \
 	gitignore \
