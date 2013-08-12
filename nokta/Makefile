@@ -13,6 +13,7 @@ CONFIGS = \
 	gitconfig \
 	gitignore \
 	gitk \
+	hgrc \
 	vimrc \
 	zprofile \
 	zshenv \
