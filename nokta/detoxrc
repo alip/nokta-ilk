@@ -1,0 +1,10 @@
+# alip's detoxrc
+
+sequence default {
+    lower;
+    utf_8;
+    safe;
+    wipeup {
+        remove_trailing;
+    };
+};
