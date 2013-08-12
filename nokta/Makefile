@@ -8,6 +8,7 @@ CONFIGS = \
 	ackrc \
 	dir_colors \
 	enchant \
+	festivalrc \
 	gdbinit \
 	gitconfig \
 	gitignore \
